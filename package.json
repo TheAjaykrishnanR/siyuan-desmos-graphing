@@ -1,5 +1,5 @@
 {
-  "name": "siyuan-plugin-desmos-graphing",
+  "name": "siyuan-desmos-graphing",
   "version": "0.1.0",
   "description": "Embed Desmos graphing calculator in SiYuan note.",
   "main": "index.js",

@@ -25,9 +25,8 @@ export default class DesmosGraphing extends Plugin {
             filter: ["desmos", "graph", "math", "数学", "绘图"],
             html: `<div class="b3-list-item__first"><span class="b3-list-item__text">${this.i18n.insertDesmos}</span><span class="b3-list-item__meta">📈</span></div>`,
             id: "insertDesmos",
-            callback(protyle: Protyle) {
-                // V2 style insertion was stable
-                protyle.insert('<iframe src="/plugins/desmos-graphing/offline-desmos/desmos.html" style="width: 100%; height: 500px;" data-subtype="iframe"></iframe>', true);
+            callback: (protyle: Protyle) => {
+                protyle.insert(`<iframe src="/plugins/${this.name}/offline-desmos/desmos.html" style="width: 100%; height: 500px;" data-subtype="iframe"></iframe>`, true);
             }
         }];
 

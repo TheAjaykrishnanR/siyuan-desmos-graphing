@@ -1,7 +1,7 @@
 {
-  "name": "desmos-graphing",
-  "author": "Vanessa",
-  "url": "https://github.com/siyuan-note/plugin-sample",
+  "name": "siyuan-desmos-graphing",
+  "author": "Ajaykrishnan R",
+  "url": "https://github.com/TheAjaykrishnanR/siyuan-desmos-graphing",
   "version": "0.1.0",
   "minAppVersion": "3.6.4",
   "backends": [
