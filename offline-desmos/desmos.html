@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Desmos Offline</title>
+    <script src="calculator.js"></script>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #calculator {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator"></div>
+    <script>
+        console.log('Desmos: Script starting');
+        
+        window.onerror = function(msg, url, line, col, error) {
+            console.error("Desmos Global Error: " + msg + " at " + line + ":" + col);
+        };
+
+        var elt = document.getElementById('calculator');
+        var calculator = Desmos.GraphingCalculator(elt);
+        window.Calc = calculator;
+
+        var isSettingState = false;
+        var lastSentState = JSON.stringify(calculator.getState());
+
+        function sendState() {
+            if (isSettingState) return;
+            var currentState = calculator.getState();
+            var currentStateStr = JSON.stringify(currentState);
+            if (currentStateStr !== lastSentState) {
+                lastSentState = currentStateStr;
+                console.log('Desmos: state changed, sending to parent');
+                window.parent.postMessage({
+                    type: 'state-changed',
+                    state: currentState
+                }, '*');
+            }
+        }
+
+        // 1. Try events
+        try {
+            calculator.observe('change', function() {
+                console.log('Desmos: change event fired');
+                sendState();
+            });
+        } catch (e) {
+            console.warn('Desmos: observe change failed', e);
+        }
+
+        // 2. Polling fallback (every 2 seconds)
+        setInterval(sendState, 2000);
+
+        // Listen for messages from the parent
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'set-state') {
+                console.log('Desmos: received set-state');
+                isSettingState = true;
+                try {
+                    calculator.setState(event.data.state);
+                    lastSentState = JSON.stringify(event.data.state);
+                    console.log('Desmos: setState successful');
+                } catch(e) {
+                    console.error('Desmos: setState failed', e);
+                }
+                setTimeout(() => { 
+                    isSettingState = false; 
+                }, 500);
+            }
+        });
+
+        // Notify parent that we are ready
+        console.log('Desmos: sending desmos-ready');
+        window.parent.postMessage({ type: 'desmos-ready' }, '*');
+    </script>
+</body>
+</html>

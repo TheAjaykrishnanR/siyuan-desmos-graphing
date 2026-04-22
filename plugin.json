@@ -1,0 +1,51 @@
+{
+  "name": "desmos-graphing",
+  "author": "Vanessa",
+  "url": "https://github.com/siyuan-note/plugin-sample",
+  "version": "0.1.0",
+  "minAppVersion": "3.6.4",
+  "backends": [
+    "windows",
+    "linux",
+    "darwin",
+    "ios",
+    "android",
+    "harmony",
+    "docker",
+    "all"
+  ],
+  "frontends": [
+    "desktop",
+    "mobile",
+    "browser-desktop",
+    "browser-mobile",
+    "desktop-window",
+    "all"
+  ],
+  "disabledInPublish": false,
+  "displayName": {
+    "default": "Desmos Graphing",
+    "zh_CN": "Desmos 数学绘图"
+  },
+  "description": {
+    "default": "Embed Desmos graphing calculator in SiYuan note.",
+    "zh_CN": "在思源笔记中嵌入 Desmos 数学绘图计算器。"
+  },
+  "readme": {
+    "default": "README.md",
+    "zh_CN": "README_zh_CN.md"
+  },
+  "funding": {
+    "openCollective": "",
+    "patreon": "",
+    "github": "",
+    "custom": [
+      "https://ld246.com/sponsor"
+    ]
+  },
+  "keywords": [
+    "开发者参考",
+    "developer reference",
+    "示例插件"
+  ]
+}
