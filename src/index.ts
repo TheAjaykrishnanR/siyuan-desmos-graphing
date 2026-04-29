@@ -32,12 +32,9 @@ export default class DesmosGraphing extends Plugin {
 
         this.boundHandleMessage = this.handleMessage.bind(this);
         window.addEventListener('message', this.boundHandleMessage);
-
-        console.log("Desmos Plugin V4 Loaded");
     }
 
     onunload() {
-        console.log("Desmos Plugin V4 Unloaded");
         window.removeEventListener('message', this.boundHandleMessage);
     }
 
@@ -55,14 +52,11 @@ export default class DesmosGraphing extends Plugin {
                         if (stateStr) {
                             try {
                                 const decoded = decodeURIComponent(stateStr);
-                                console.log('Desmos V4: Restoring state for block', blockId);
                                 iframe.contentWindow.postMessage({ type: 'set-state', state: JSON.parse(decoded) }, '*');
                                 if (blockId) this.lastSavedState.set(blockId, decoded);
                             } catch (e) {
                                 console.error('Desmos V4: Failed to restore state', e);
                             }
-                        } else {
-                            console.log('Desmos V4: No state to restore for', blockId);
                         }
                     }
                     break;
@@ -82,7 +76,6 @@ export default class DesmosGraphing extends Plugin {
                         const currentSaved = savedStateStr ? decodeURIComponent(savedStateStr) : (this.lastSavedState.get(blockId) || "");
 
                         if (currentSaved !== newStateStr) {
-                            console.log('Desmos V4: State changed. Saving...', blockId);
                             this.lastSavedState.set(blockId, newStateStr);
                             const encoded = encodeURIComponent(newStateStr);
                             
@@ -96,19 +89,14 @@ export default class DesmosGraphing extends Plugin {
                                     "custom-desmos-state": encoded
                                 }
                             }, (res) => {
-                                if (res.code === 0) {
-                                    console.log('Desmos V4: Saved via /api/attr/setBlockAttrs');
-                                } else {
-                                    console.warn('Desmos V4: /api/attr failed, trying /api/block/setBlockAttrs', res);
+                                if (res.code !== 0) {
                                     fetchPost("/api/block/setBlockAttrs", {
                                         id: blockId,
                                         attrs: {
                                             "custom-desmos-state": encoded
                                         }
                                     }, (res2) => {
-                                        if (res2.code === 0) {
-                                            console.log('Desmos V4: Saved via /api/block/setBlockAttrs');
-                                        } else {
+                                        if (res2.code !== 0) {
                                             console.error('Desmos V4: Persist failed entirely', res2);
                                         }
                                     });

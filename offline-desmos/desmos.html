@@ -22,8 +22,6 @@
 <body>
     <div id="calculator"></div>
     <script>
-        console.log('Desmos: Script starting');
-        
         window.onerror = function(msg, url, line, col, error) {
             console.error("Desmos Global Error: " + msg + " at " + line + ":" + col);
         };
@@ -41,7 +39,6 @@
             var currentStateStr = JSON.stringify(currentState);
             if (currentStateStr !== lastSentState) {
                 lastSentState = currentStateStr;
-                console.log('Desmos: state changed, sending to parent');
                 window.parent.postMessage({
                     type: 'state-changed',
                     state: currentState
@@ -52,11 +49,10 @@
         // 1. Try events
         try {
             calculator.observe('change', function() {
-                console.log('Desmos: change event fired');
                 sendState();
             });
         } catch (e) {
-            console.warn('Desmos: observe change failed', e);
+            // Ignore observe failures
         }
 
         // 2. Polling fallback (every 2 seconds)
@@ -65,24 +61,20 @@
         // Listen for messages from the parent
         window.addEventListener('message', (event) => {
             if (event.data.type === 'set-state') {
-                console.log('Desmos: received set-state');
                 isSettingState = true;
                 try {
                     calculator.setState(event.data.state);
                     lastSentState = JSON.stringify(event.data.state);
-                    console.log('Desmos: setState successful');
                 } catch(e) {
                     console.error('Desmos: setState failed', e);
                 }
-                setTimeout(() => { 
-                    isSettingState = false; 
+                setTimeout(() => {
+                    isSettingState = false;
                 }, 500);
             }
         });
 
         // Notify parent that we are ready
-        console.log('Desmos: sending desmos-ready');
         window.parent.postMessage({ type: 'desmos-ready' }, '*');
-    </script>
-</body>
+    </script></body>
 </html>

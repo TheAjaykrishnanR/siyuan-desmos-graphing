@@ -10,6 +10,6 @@ Embed Desmos graphing calculators directly into your SiYuan notes.
 
 ## Usage
 
-1. Type `/desmos`, `/graph`, or `/math` in any document.
+1. Type `/desmos`, `/graph`, `/math`, `/数学`, or `/绘图` in any document.
 2. Select "Insert Desmos" from the menu.
 3. Your graphs are saved automatically as you work.
